@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Care Manager: Web Application</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script> 
+    
+    <style>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                // Custom colors used throughout script.js
+                'deep-blue': '#1E40AF',
+                'accent-green': '#34D399',
+                'soft-green': '#10B981',
+                'soft-blue': '#DBEAFE',
+                'vax-red': '#EF4444',
+              }
+            }
+          }
+        }
+        
+        /* Utility fixes */
+        .modal-hidden {
+            display: none !important;
+        }
+        /* Ensure the body and app container take full height */
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            background-color: #f9fafb; /* bg-gray-50 */
+            color: #1f2937; /* text-gray-800 */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        #app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script type="module">
+        // Import necessary functions from Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Make Firebase functions globally accessible to script.js ---
+        window.initializeApp = initializeApp;
+        window.getAuth = getAuth;
+        window.onAuthStateChanged = onAuthStateChanged;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.signOut = signOut;
+        window.getFirestore = getFirestore;
+        window.doc = doc;
+        window.setDoc = setDoc;
+        window.onSnapshot = onSnapshot;
+        window.setLogLevel = setLogLevel;
+        
+        // --- Firebase Configuration (Provided by User) ---
+        window.firebaseConfig = {
+          apiKey: "AIzaSyABogXdHzkO8OykJGkRAk3QCOCMpLwhlzw",
+          authDomain: "baby--care--app.firebaseapp.com",
+          projectId: "baby--care--app",
+          storageBucket: "baby--care--app.firebasestorage.app",
+          messagingSenderId: "1062720707709",
+          appId: "1:1062720707709:web:4ed47409ac45184294e514",
+          measurementId: "G-S6JRSN2PM6"
+        };
+        
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <div id="app-container" class="min-h-screen flex flex-col">
+        
+        <div id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+            <div class="text-center">
+                <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-deep-blue mb-4"></div>
+                <p class="text-deep-blue text-lg">Loading secure connection...</p>
+            </div>
+        </div>
+
+        </div>
+    
+    <div id="modal-container"></div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

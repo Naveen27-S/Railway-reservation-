@@ -1,0 +1,8 @@
+<h2>Select a Train to Book Ticket</h2>
+<ul>
+  {% for train in trains %}
+    <li>
+      <a href="{{ url_for('book_ticket', train_id=train[0]) }}">{{ train[1] }}</a>
+    </li>
+  {% endfor %}
+</ul>

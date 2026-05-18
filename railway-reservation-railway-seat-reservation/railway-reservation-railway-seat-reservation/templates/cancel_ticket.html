@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancel Ticket</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Header styles */
+        header {
+            background-color: #004080;
+            color: white;
+            padding: 20px;
+        }
+        header .logo h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+        header nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main section styles */
+        section {
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        section h2 {
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+        .ticket-card {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 300px;
+            padding: 16px;
+            text-align: center;
+        }
+        .ticket-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .ticket-card p {
+            margin: 6px 0;
+            color: #555;
+        }
+        .ticket-card form {
+            margin-top: 10px;
+        }
+        .ticket-card button {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .ticket-card button:hover {
+            background-color: #c9302c;
+        }
+
+        /* Flash messages styles */
+        .flashes {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+        .flashes li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .flashes .success {
+            background-color: #5cb85c;
+            color: white;
+        }
+        .flashes .danger {
+            background-color: #d9534f;
+            color: white;
+        }
+        .flashes .info {
+            background-color: #5bc0de;
+            color: white;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #004080;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <h1>RailStreak</h1>
+            <p>Indian Railway Reservation System</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <!-- The train_id will be passed to the URL for the Book Ticket page -->
+                {% if tickets %}
+                    <li><a href="{{ url_for('book_ticket', train_id=tickets[0][0]) }}">Book Ticket</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('book_ticket') }}">Book Ticket</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main section -->
+    <section>
+        <h2>Your Booked Tickets</h2>
+
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Display booked tickets -->
+        {% if tickets %}
+            <div class="card-container">
+                {% for ticket in tickets %}
+                    <div class="ticket-card">
+                        <h3>{{ ticket[1] }}</h3> <!-- Train Name -->
+                        <p><strong>Seat Number:</strong> {{ ticket[2] }}</p> <!-- Seat Number -->
+                        <p><strong>Booking Date:</strong> {{ ticket[3] }}</p> <!-- Booking Date -->
+                        <form action="{{ url_for('cancel_ticket') }}" method="POST">
+                            <input type="hidden" name="booking_id" value="{{ ticket[0] }}">
+                            <button type="submit">Cancel Ticket</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="text-align: center;">You have no booked tickets currently.</p>
+        {% endif %}
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Indian Railway Reservation</p>
+    </footer>
+</body>
+</html>
+    
