@@ -1,0 +1,100 @@
+/* -------------------------------------------------------------------
+ * Global Styles and Typography (Minimal/Cleanup)
+ * ------------------------------------------------------------------- */
+
+/* Keep body/h-tags for defaults, but we need to ensure color utility classes work */
+body {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    background-color: #f9fafb; /* bg-gray-50 */
+    color: #1f2937; /* text-gray-800 */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* -------------------------------------------------------------------
+ * CUSTOM COLOR OVERRIDES (CRITICAL FIX)
+ * This overrides Tailwind utilities that fail to compile custom colors
+ * like 'bg-deep-blue' when running locally from the CDN.
+ * ------------------------------------------------------------------- */
+
+/* 1. Background Colors (e.g., Navbar, Buttons) */
+.bg-deep-blue {
+    background-color: #1E40AF !important; 
+}
+.bg-accent-green {
+    background-color: #34D399 !important;
+}
+.bg-soft-green {
+    background-color: #10B981 !important;
+}
+.bg-vax-red {
+    background-color: #EF4444 !important;
+}
+/* Ensure hover/active states work if they rely on these colors */
+.hover\:bg-blue-700:hover { /* for Navbar buttons */
+    background-color: #1c368d !important;
+}
+.hover\:bg-red-600:hover { /* for Sign Out button */
+    background-color: #dc2626 !important;
+}
+
+/* 2. Text Colors (e.g., Headings, Accents) */
+.text-deep-blue {
+    color: #1E40AF !important; 
+}
+.text-accent-green {
+    color: #34D399 !important;
+}
+.text-vax-red {
+    color: #EF4444 !important;
+}
+.text-white {
+    color: #ffffff !important;
+}
+.text-gray-300 { /* For unselected navbar links */
+    color: #d1d5db !important;
+}
+
+/* 3. Border Colors (e.g., Stats Cards) */
+.border-accent-green { 
+    border-color: #34D399 !important; 
+}
+.border-vax-red { 
+    border-color: #EF4444 !important; 
+}
+.border-deep-blue { 
+    border-color: #1E40AF !important; 
+}
+/* This specific class is used for the stats cards border-b-4 */
+.border-b-4.border-accent-green {
+    border-bottom-color: #34D399 !important;
+}
+.border-b-4.border-vax-red {
+    border-bottom-color: #EF4444 !important;
+}
+.border-b-4.border-deep-blue {
+    border-bottom-color: #1E40AF !important;
+}
+
+/* -------------------------------------------------------------------
+ * Essential Layout/Sticky Fixes from Original CSS
+ * ------------------------------------------------------------------- */
+
+/* Ensure Navbar sticks and has correct container styles */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Base heading colors (if not overwritten by text-deep-blue) */
+h1, h2, h3 {
+    color: #1E40AF; /* text-deep-blue fallback */
+}

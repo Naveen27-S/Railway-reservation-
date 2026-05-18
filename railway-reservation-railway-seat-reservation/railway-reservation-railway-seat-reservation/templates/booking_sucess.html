@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Success</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>RailStreak</h1>
+        <nav>
+            <button onclick="window.location.href='{{ url_for('home') }}'">Home</button>
+            <button onclick="window.location.href='{{ url_for('book_ticket') }}'">Book Ticket</button>
+            <button onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+        </nav>
+    </header>
+
+    <section class="booking-success-section">
+        <h2>Ticket Booked Successfully!</h2>
+        <p>Your ticket has been successfully booked.</p>
+
+        <div class="ticket-details">
+            <p><strong>Train Name:</strong> {{ train_name }}</p>
+            <p><strong>Seat Number:</strong> {{ seat_number }}</p>
+            <p><strong>Booking Date:</strong> {{ booking_date }}</p>
+        </div>
+
+        <button onclick="window.location.href='{{ url_for('home') }}'">Back to Home</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Indian Railway Reservation</p>
+    </footer>
+</body>
+</html>

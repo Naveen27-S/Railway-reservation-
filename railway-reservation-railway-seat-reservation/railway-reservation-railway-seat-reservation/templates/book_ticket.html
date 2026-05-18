@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Ticket</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='book_style.css') }}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>RailStreak</h1>
+    <p>Indian Railway Reservation System</p>
+    <nav>
+      <button onclick="window.location.href='{{ url_for('home') }}'">Home</button>
+      <button onclick="window.location.href='{{ url_for('cancel') }}'">Cancel Ticket</button>
+      <button onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+    </nav>
+  </header>
+
+  <section class="book-ticket-container">
+    <h2>Ticket Booking Form</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% if booked_ticket %}
+    <div class="alert alert-success">
+      <strong>Ticket Booked Successfully!</strong><br><br>
+      <strong>Name:</strong> {{ booked_ticket.name }}<br>
+      <strong>Age:</strong> {{ booked_ticket.age }}<br>
+      <strong>Train:</strong> {{ booked_ticket.train_name }}<br>
+      <strong>Seat Number:</strong> {{ booked_ticket.seat_number }}<br>
+      <strong>Seat Class:</strong> {{ booked_ticket.seat_class }}<br>
+      <strong>Date:</strong> {{ booked_ticket.booking_date }}
+    </div>
+    
+{% endif %}
+
+    <form method="POST" action="{{ url_for('book_ticket', train_id=train[0]) }}">
+      <!-- Train Selection -->
+      <div class="form-group">
+        <label for="train_id">Train</label>
+        <select name="train_id" id="train_id" required>
+          <option value="{{ train[0] }}" selected>{{ train[1] }}</option>
+          <!-- Additional trains can be populated dynamically -->
+        </select>
+      </div>
+
+      <!-- Seat Selection (dynamic) -->
+      <div class="form-group">
+        <label for="seat_no">Available Seats</label>
+        <div class="seat-selection" id="seat-container">
+          <p>Select a train to view available seats.</p>
+        </div>
+      </div>
+
+      <!-- User Info -->
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" name="name" id="name" required placeholder="Enter your full name">
+      </div>
+
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" name="age" id="age" required min="1" placeholder="Enter your age">
+      </div>
+
+      <div class="form-group">
+        <label for="date">Booking Date</label>
+        <input type="date" name="date" id="date" required>
+      </div>
+
+      <button type="submit">Book Ticket</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Indian Railway Reservation</p>
+  </footer>
+
+  <script>
+    const currentDate = new Date().toISOString().split('T')[0];
+    document.getElementById("date").setAttribute("min", currentDate);
+    document.getElementById("date").value = currentDate;
+
+    // Fetch seats for selected train
+    $('#train_id').change(function () {
+      const trainId = $(this).val();
+      $('#seat-container').html('<p>Loading seats...</p>');
+
+      if (trainId) {
+        $.get(`/get_seats/${trainId}`, function (data) {
+          let seatHTML = '';
+
+          if (data.seats.length === 0) {
+            seatHTML = '<p>No available seats for this train.</p>';
+          } else {
+            data.seats.forEach(seat => {
+              if (seat.is_booked === 0) {
+                let seatClass = seat.seat_class.toLowerCase();
+                seatHTML += `
+                  <div class="seat ${seatClass}">
+                    <input type="radio" id="seat_${seat.id}" name="seat_no" value="${seat.id}" required>
+                    <label for="seat_${seat.id}">${seat.seat_number} (${seat.seat_class})</label>
+                  </div>`;
+              }
+            });
+          }
+
+          // Insert the seat HTML into the container
+          $('#seat-container').html(seatHTML);
+        });
+      }
+    });
+
+    // Trigger the seat loading when the page loads with a selected train (if any)
+    $(document).ready(function () {
+      const trainId = $('#train_id').val();
+      if (trainId) {
+        $('#train_id').trigger('change');
+      }
+    });
+  </script>
+</body>
+</html>
+
